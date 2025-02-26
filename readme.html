@@ -1,3 +1,99 @@
+WORDPRESS POP-UP PLUGIN
+
+📌 Deskripsi
+Plugin ini adalah solusi pop-up yang dibuat menggunakan WordPress Plugin WP Scaffold. Plugin ini memungkinkan admin untuk menampilkan pop-up khusus di halaman tertentu berdasarkan pengaturan yang telah ditentukan. Dibangun dengan pendekatan berbasis OOP (Object-Oriented Programming), plugin ini memanfaatkan Custom Post Type (CPT), WordPress REST API, serta framework frontend modern seperti React atau Vue.
+
+🎯 Fitur Utama
+- Menggunakan Custom Post Type (CPT) untuk menyimpan data pop-up.
+- Menyediakan endpoint REST API di /wp-json/artistudio/v1/popup.
+- Hanya dapat diakses oleh pengguna yang sudah login.
+- Menampilkan pop-up berbasis halaman yang telah ditentukan.
+- Dibangun dengan pendekatan OOP menggunakan namespace dan Singleton Pattern.
+- Desain pop-up menggunakan SASS untuk fleksibilitas styling.
+- Frontend pop-up dibuat menggunakan React.js atau Vue.js.
+
+🛠️ Instalasi
+1. Clone Repositori Plugin
+cd wp-content/plugins/
+git clone https://github.com/username/popup-plugin.git popup-plugin
+
+2. Aktifkan Plugin
+- Masuk ke Dashboard WordPress
+- Navigasi ke Plugins → Installed Plugins
+- Temukan Pop-Up Plugin dan klik Activate
+
+3. Flush Permalinks
+- Pergi ke Settings → Permalinks
+- Klik Save Changes (tanpa perlu mengubah pengaturan apa pun)
+
+4. Instal Dependensi (Jika Menggunakan React/Vue)
+cd wp-content/plugins/popup-plugin/assets/js/
+npm install
+
+5. Build Frontend (React/Vue)
+- Jika menggunakan React/Vue:
+npm run build
+
+🚀 Cara Penggunaan
+1. Tambahkan Pop-Up Baru
+- Masuk ke Dashboard WordPress
+- Navigasi ke Pop-ups
+- Klik Add New
+- Isi:
+	=> Title → Judul pop-up
+	=> Description → Isi konten pop-up
+	=> Page → Halaman di mana pop-up akan muncul (misalnya: sample-page)
+
+- Klik Publish
+
+2. Cek Endpoint REST API
+Pastikan endpoint berjalan dengan mengunjungi:
+
+http://localhost/wordpress/wp-json/artistudio/v1/popup
+
+🛠️ Pengembangan
+
+1. Struktur Direktori
+popup-plugin/
+│── assets/
+│   ├── css/
+│   ├── js/
+│       ├── popup.js
+│── includes/
+│   ├── class-popup-api.php
+│   ├── class-popup-metabox.php
+│── popup-plugin.php
+
+2. Penggunaan REST API di JavaScript
+fetch('http://localhost/wordpress/wp-json/artistudio/v1/popup')
+    .then(response => response.json())
+    .then(data => {
+        data.forEach(popup => {
+            if (window.location.pathname.includes(popup.page)) {
+                let popUpDiv = document.createElement('div');
+                popUpDiv.classList.add('popup-overlay');
+                popUpDiv.innerHTML = `
+                    <div class="popup-content">
+                        <h2 class="popup-text">${popup.title}</h2>
+                        <div class="popup-text">${popup.description}</div>
+                    </div>
+                `;
+                document.body.appendChild(popUpDiv);
+
+                // Event: Klik di luar popup-content untuk menutup pop-up
+                popUpDiv.addEventListener('click', function (event) {
+                    if (event.target === popUpDiv) {
+                        popUpDiv.remove();
+                    }
+                });
+            }
+        });
+    })
+    .catch(error => console.error('Fetch error:', error));
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
